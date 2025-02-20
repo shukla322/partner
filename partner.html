@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love ❤️</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        .heartbeat {
+            animation: heartbeat 1s ease-in-out infinite;
+        }
+        .bg-image {
+            background-image: url('https://images.pexels.com/photos/1767434/pexels-photo-1767434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .content-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const App = () => {
+            const [step, setStep] = React.useState(0);
+            const [showProposal, setShowProposal] = React.useState(false);
+            const [answer, setAnswer] = React.useState(null);
+
+            const memories = [
+                {
+                    image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&h=600&fit=crop",
+                    text: "From the moment I first saw you, I knew you were special"
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1537727365640-d9b9cbeeac34?w=800&h=600&fit=crop",
+                    text: "Every moment with you has been magical"
+                },
+                {
+                    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&h=600&fit=crop",
+                    text: "You make my life complete"
+                }
+            ];
+
+            const handleNext = () => {
+                if (step < memories.length - 1) {
+                    setStep(step + 1);
+                } else {
+                    setShowProposal(true);
+                }
+            };
+
+            const Memory = ({ image, text }) => (
+                <div className="max-w-2xl mx-auto p-6 text-center">
+                    <div className="floating mb-8">
+                        <img 
+                            src={image} 
+                            alt="Memory" 
+                            className="w-full h-[400px] object-cover rounded-lg shadow-xl"
+                        />
+                    </div>
+                    <p className="text-2xl text-white font-serif italic mb-8">{text}</p>
+                    <button 
+                        onClick={handleNext}
+                        className="bg-white text-pink-500 px-8 py-3 rounded-full font-semibold hover:bg-pink-50 transition-colors"
+                    >
+                        ❤️ Next
+                    </button>
+                </div>
+            );
+
+            const Proposal = () => (
+                <div className="max-w-2xl mx-auto p-6 text-center">
+                    <div className="heartbeat text-9xl mb-8">❤️</div>
+                    <h1 className="text-4xl font-bold text-white mb-6">
+                        Will You Be My Partner?
+                    </h1>
+                    {answer === null ? (
+                        <div className="space-x-4">
+                            <button 
+                                onClick={() => setAnswer(true)}
+                                className="bg-white text-pink-500 px-8 py-3 rounded-full font-semibold hover:bg-pink-50 transition-colors"
+                            >
+                                Yes! ❤️
+                            </button>
+                            <button 
+                                onClick={() => {
+                                    const btn = document.querySelector('.no-btn');
+                                    btn.style.position = 'absolute';
+                                    btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+                                    btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+                                }}
+                                className="no-btn bg-white text-gray-500 px-8 py-3 rounded-full font-semibold hover:bg-pink-50 transition-colors"
+                            >
+                                No
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="text-white text-2xl animate-bounce">
+                            {answer ? "❤️ I love you! ❤️" : ""}
+                        </div>
+                    )}
+                </div>
+            );
+
+            return (
+                <div className="min-h-screen bg-image">
+                    <div className="min-h-screen content-overlay flex items-center justify-center">
+                        {!showProposal ? (
+                            <Memory {...memories[step]} />
+                        ) : (
+                            <Proposal />
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
